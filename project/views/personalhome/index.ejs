@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Home page</title>
+	<link rel="stylesheet" type="text/css" href="/abc/css/style.css">
+</head>
+<body>
+	<h1> Welcome, <%= name %></h1>
+	
+	<a href="/campaign/addcampaign">Add Campaign</a> | 
+	<a href="/campaign/campaignlist">Campaign list</a> | 
+	<a href="/logout">logout</a> 
+  
+
+  <hr>
+	<div>
+			<br>
+		
+			<fieldset>
+				
+				<table>
+					<tr>
+						<td><label for="name">Search Campaign: </label></td>
+						<td>
+							<input id = "name" class="name" type="text" name="name" placeholder="Campaign title">
+						</td>
+						<td>
+							<button class="search">Search</button>
+						</td>
+					</tr>
+				</table>
+				
+			</fieldset>
+		
+	</div>
+	<div id="info">
+		
+	</div>
+	<div>
+		<h2>History</h2>
+			<table border="1">
+		<tr>
+			<td>Campaign ID</td>
+			<td>Status</td>
+			<td>Title</td>
+		</tr>
+
+		<% 
+			campaign.forEach( function(std){ %>
+			<tr>
+				<td><%= std.id %></td>
+				<td><%= std.status %></td>
+				<td>
+					<a href="/campaign/view/<%= std.id %>/<%= std.uid %>/<%= std.target_fund %>/<%= std.raised_fund %>/<%= std.ctype %>/<%= std.description %>/<%= std.image %>/<%= std.publisedDate %>/<%= std.endDate %>/<%= std.title %>"><%= std.title %></a>
+				</td>
+			</tr>
+		<%
+			}); 
+		%>
+		
+	</table>
+		
+	</div>
+	<script src = "/main.js"></script>
+</body>
+</html>

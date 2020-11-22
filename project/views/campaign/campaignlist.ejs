@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Campaign List</title>
+</head>
+<body>
+	<h1> Campaign list</h1>
+
+	
+	<br>
+	<div>
+		<%= typeof msg != 'undefined' ? msg : '' %>
+	</div>
+
+	<table border="1">
+		<tr>
+			<td>ID</td>
+			<td>UID</td>
+			<td>Target Fund</td>
+			<td>Raised Fund</td>
+			<td>Campaign Type</td>
+			<td>Description</td>
+			<td>Image</td>
+			<td>Publish Date</td>
+			<td>End Date</td>
+			<td>Status</td>
+			<td>Title</td>
+			<td>Action</td>
+		</tr>
+
+		<% 
+			campaigns.forEach( function(std){ %>
+			<tr>
+				<td><%= std.id %></td>
+				<td><%= std.uid %></td>
+				<td><%= std.target_fund %></td>
+				<td><%= std.raised_fund %></td>
+				<td><%= std.ctype %></td>
+				<td><%= std.description %></td>
+				<td><%= std.image %></td>
+				<td><%= std.publisedDate %></td>
+				<td><%= std.endDate %></td>
+				<td><%= std.status %></td>
+				<td><%= std.title %></td>
+				<td>
+					<a href="/campaign/edit/<%= std.id %>/<%= std.target_fund %>/<%= std.raised_fund %>/<%= std.ctype %>/<%= std.description %>/<%= std.image %>/<%= std.publisedDate %>/<%= std.endDate %>/<%= std.title %>">Edit</a> |
+					<a href="/campaign/delete/<%= std.id %>/<%= std.uid %>/<%= std.target_fund %>/<%= std.raised_fund %>/<%= std.ctype %>/<%= std.description %>/<%= std.image %>/<%= std.publisedDate %>/<%= std.endDate %>/<%= std.status %>/<%= std.title %>">Delete</a>|
+					<a href="/campaign/report/<%= std.id %>/<%= std.uid %>">Report</a>|
+					<a href="/campaign/bookmark/<%= std.id %>/<%= std.uid %>">Bookmark</a>
+				</td>
+			</tr>
+		<%
+			}); 
+		%>
+		
+	</table>
+	<a href="/personalhome">Back</a> | 
+	<a href="/logout">logout</a> 
+
+</body>
+</html>
