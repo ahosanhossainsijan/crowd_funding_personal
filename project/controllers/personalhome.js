@@ -27,13 +27,15 @@ router.get('/', (req, res)=>{
 
 
 
-router.post('/search', (req, res)=>{
-	title = {
-		name : req.body.name
-	};
-
-	campaignmodel.search(title, function(results){
+router.post('/show', (req, res)=>{
+	console.log(req.body.name);
+	// title = {
+	// 	name : req.body.name
+	// };
+       
+	campaignmodel.search(req.body.name, function(results){
 		if(results){
+			console.log(results[0]);
 			res.json({campaign:results[0]});
 		}else{
 			res.json({campaign:'error'});

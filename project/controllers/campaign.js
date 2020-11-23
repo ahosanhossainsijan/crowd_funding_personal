@@ -1,7 +1,12 @@
 const express 	= require('express');
+const bodyParser    = require('body-parser');
+const { check, validationResult } = require('express-validator');
+const urlencodedParser 			  = bodyParser.urlencoded({extended : false});
 const userModel = require('../models/userModel');
 const campaignmodel = require('../models/campaignmodel');
 const router 	= express.Router();
+
+
 
 router.get('*',  (req, res, next)=>{
 	if(req.cookies['uname'] == null){
@@ -16,11 +21,56 @@ router.get('/addcampaign', (req, res)=>{
 });
 
 
-router.post('/addcampaign', (req, res)=>{
+router.post('/addcampaign',urlencodedParser,[
+	check('title','Title field can not be empty!!')
+		.exists()
+		.not().isEmpty()
+		.trim(),
+	check('description', 'Description Name field cannot be empty')
+		.exists()
+		.not().isEmpty()
+		.trim(),
+	check('targetfund','Target fund Field Can not be Empty')
+		.exists()
+		.not().isEmpty(),
+	check('publisheddate','Published Date Field Can not be Empty!!!')
+		.exists()
+		.not().isEmpty(),
+	check('enddate','End Date Field can not be Empty')
+		.exists()
+		.not().isEmpty()
+	
+],(req,res)=>{
+	
+	const errors = validationResult(req); 
+	if(!errors.isEmpty()){
+		const alert = errors.array();
+		res.render('campaign/addcampaign',{
+			alert
+		});	
+	}
+     else{ 
 var id;
+var imagename;
 console.log(req.cookies['uname']);
 
   id = req.cookies['id'];
+
+  if(req.files)
+  {
+      var file = req.files.image;
+      imagename = file.name;
+      images='/upload/'+imagename;
+      file.mv('./upload/'+imagename,function(err){
+      	if(err)
+      	{
+      		console.log(err);
+      	}
+      	else{
+      		console.log(imagename+"uploaded");
+      	}
+      })
+  }
 	var campagin = {
 		uid: id,
 		targetfund: req.body.targetfund,
@@ -29,7 +79,7 @@ console.log(req.cookies['uname']);
 		description: req.body.description,
 		publisheddate: req.body.publisheddate,
 		enddate: req.body.enddate,
-		image: 'abc',
+		image: images,
 		status: 1,
 		title: req.body.title
 	};
@@ -42,6 +92,7 @@ console.log(req.cookies['uname']);
 		res.render('/campaign/addcampaign');
 		}
 	 });
+	}	  
 });
 
  router.get('/campaignlist', (req, res)=>{
