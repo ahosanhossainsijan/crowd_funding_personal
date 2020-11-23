@@ -65,6 +65,22 @@ report: function(campaign, callback){
 		});
 	},
 
+	contactadmin: function(campaign, callback){
+		var today = new Date();
+		var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+		var time = today.getHours()+":" + today.getMinutes() + ":" +today.getSeconds();
+		var dateTime = date+' '+time;
+		console.log(dateTime);
+		var sql = "insert into contactadmin ( uid, description, updatedDate) values('"+campaign.uid+"', '"+campaign.description+"', '"+dateTime+"')";
+		db.execute(sql, function(status){
+			if(status){
+				callback(true);
+			}else{
+				callback(false);
+			}
+		});
+	},
+
 	check: function(campaign, callback){
 		var sql = "select * from bookmarks where cid = '"+campaign.id+"'";
 		db.getResults(sql, function(results){

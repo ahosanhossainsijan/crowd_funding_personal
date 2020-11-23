@@ -194,6 +194,28 @@ router.post('/report/:id/:uid', (req, res)=>{
 	
 });
 
+router.get('/contactadmin', (req, res)=>{
+	res.render('campaign/contactadmin');
+	
+});
+
+router.post('/contactadmin', (req, res)=>{
+	
+	var currentCampaign = {
+		uid : req.cookies['uid'],
+		description : req.body.Description
+	};
+	campaignmodel.contactadmin(currentCampaign, function(status){
+		if(status){
+			var mg = encodeURIComponent('**Message-sent**');
+			res.redirect('/campaign/contactadmin?msg='+mg);
+		}else{
+				
+		}
+	});
+	
+});
+
 router.get('/bookmark/:id/:uid', (req, res)=>{
 	
 	var currentCampaign = {
