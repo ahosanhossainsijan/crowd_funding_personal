@@ -4,7 +4,17 @@
 	<title>Add Campagin</title>
 </head>
 <body>
-	<form method="post">
+	<% if(typeof alert != 'undefined') { %>
+    <% alert.forEach(function(error) { %>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <%= error.msg %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+    <% }) %>
+<% } %>
+	<form  action="/campaign/addcampaign" method="post"  enctype="multipart/form-data">
 		<fieldset>
 			<legend>Add Campagin</legend>
 			<table>
@@ -28,6 +38,11 @@
 					<td>End Date</td>
 					<td><input type="text" name="enddate"></td>
 				</tr>
+				<tr>
+					<td>Image</td>
+					<td><input type="file" name="image"></td>
+				</tr>
+
 				<tr>
 					<td></td>
 					<td><input type="submit" name="submit" value="Submit"></td>

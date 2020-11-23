@@ -5,14 +5,12 @@ $(document).ready(function(){
 
 		console.log(name);
 		$.ajax({
-			url: '/personalhome/search',
+			url: '/personalhome/show',
 			method: 'post',
 			datatype : 'json',
 			data : {'name':name},
 			success:function(response){
 				if(response.campaign !== 'error'){
-
-					// $('#info').html(response.user.id);
 					 
 					$('#info').html('<hr>'+'Id: '+response.campaign.id+'<br>'+'Type: '+response.campaign.ctype+'<br>'+'Description: '+response.campaign.description+'<br>'+'Title: '+response.campaign.title);
 					$('#name').val('');

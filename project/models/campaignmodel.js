@@ -78,7 +78,7 @@ report: function(campaign, callback){
 	},
 	search: function(title, callback){
 
-		var sql = "select * from campaigns where title like '%"+title.name+"%'";
+		var sql = "select * from campaigns where title like '%"+title+"%'";
 		db.getResults(sql, function(results){
 			if(results.length > 0){
 				callback(results);
