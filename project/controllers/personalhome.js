@@ -26,7 +26,6 @@ router.get('/', (req, res)=>{
 
 
 
-
 router.post('/show', (req, res)=>{
 	console.log(req.body.name);
 	// title = {

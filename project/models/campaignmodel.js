@@ -81,6 +81,39 @@ report: function(campaign, callback){
 		});
 	},
 
+	donate: function(campaign, callback){
+		var today = new Date();
+		var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+		var time = today.getHours()+":" + today.getMinutes() + ":" +today.getSeconds();
+		var dateTime = date+' '+time;
+		console.log(dateTime);
+		var sql = "insert into donation ( uid, cid, amount, donationDate) values('"+campaign.uid+"', '"+campaign.cid+"', '"+campaign.amount+"', '"+dateTime+"')";
+		db.execute(sql, function(status){
+			var sql1 = "select * from campaigns where id='"+campaign.cid+"'";
+		db.getResults(sql1, function(results){
+
+				 var raised = results[0].raised_fund;
+         raised = (raised - 0) + (campaign.amount -0);
+        
+		
+			var sql2 = "update campaigns set raised_fund = '"+raised+"'  where id = '"+campaign.cid+"'";
+				db.execute(sql2, function(status){
+				callback(status);
+	
+		
+				
+			});
+			
+		});
+
+			
+	
+		
+				
+			});
+		
+	},
+
 	check: function(campaign, callback){
 		var sql = "select * from bookmarks where cid = '"+campaign.id+"'";
 		db.getResults(sql, function(results){
@@ -126,5 +159,6 @@ report: function(campaign, callback){
 			callback(results);
 		});
 	},
+
 	
 	};

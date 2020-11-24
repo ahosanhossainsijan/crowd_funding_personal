@@ -43,7 +43,7 @@
 				<td><%= std.status %></td>
 				<td><%= std.title %></td>
 				<td>
-					<a href="/campaign/edit/<%= std.id %>/<%= std.target_fund %>/<%= std.raised_fund %>/<%= std.ctype %>/<%= std.description %>/<%= std.image %>/<%= std.publisedDate %>/<%= std.endDate %>/<%= std.title %>">Edit</a> |
+					<a href="/campaign/edit/<%= std.id %>/<%= std.uid %>/<%= std.target_fund %>/<%= std.raised_fund %>/<%= std.ctype %>/<%= std.description %>/<%= std.image %>/<%= std.publisedDate %>/<%= std.endDate %>/<%= std.title %>">Edit</a> |
 					<a href="/campaign/delete/<%= std.id %>/<%= std.uid %>/<%= std.target_fund %>/<%= std.raised_fund %>/<%= std.ctype %>/<%= std.description %>/<%= std.image %>/<%= std.publisedDate %>/<%= std.endDate %>/<%= std.status %>/<%= std.title %>">Delete</a>|
 					<a href="/campaign/report/<%= std.id %>/<%= std.uid %>">Report</a>|
 					<a href="/campaign/bookmark/<%= std.id %>/<%= std.uid %>">Bookmark</a>
@@ -54,6 +54,8 @@
 		%>
 		
 	</table>
+
+     
 	<a href="/personalhome">Back</a> | 
 	<a href="/logout">logout</a> 
 

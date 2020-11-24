@@ -5,7 +5,10 @@ const urlencodedParser 			  = bodyParser.urlencoded({extended : false});
 const userModel = require('../models/userModel');
 const campaignmodel = require('../models/campaignmodel');
 const router 	= express.Router();
-
+const pdfMake                     = require('../pdfmake/pdfmake');
+const vfsFonts                    = require('../pdfmake/vfs_fonts');
+ 
+pdfMake.vfs = vfsFonts.pdfMake.vfs;
 
 
 router.get('*',  (req, res, next)=>{
@@ -98,13 +101,66 @@ console.log(req.cookies['uname']);
  router.get('/campaignlist', (req, res)=>{
 	campaignmodel.getAll(function(results){
 		
-		res.render('campaign/campaignlist', {campaigns: results, msg : req.query.msg});
+			res.render('campaign/campaignlist', {campaigns: results, msg : req.query.msg});
+		});
 	});
+	router.get('/pdfshow',(req, res)=>{
 	
+		res.render('campaign/pdfshow');
+		
+	});
+	router.post('/pdfshow',(req, res)=>{
+	campaignmodel.getAll(function(results){
 	
+var body = [['Title','Target Fund', 'Raised Fund']];
+			results.forEach(element => {
+				body.push([element.title.trim(),element.target_fund,element.raised_fund]);
+			});
+			console.log(body);
+			var table = {
+				headerRows : 1,
+				widths : ['auto','auto'],
+				body : body
+			};
+			var documentDefinition = {
+				info: {
+					title: 'Campaign report',
+					author: 'Md.Ahosan Hossain Sijan',
+					subject: 'All Campaign List',
+					keywords: 'List',
+				},
+				content:[
+					{
+						text: 'All Campaign List', style: 'header'
+					},
+					{
+					  layout: 'lightHorizontalLines',
+					  table: table
+					}
+				  ],
+				  styles: {
+					header: {
+					  fontSize: 22,
+					  bold: true
+					}
+				  }
+			};
+			const pdfDoc = pdfMake.createPdf(documentDefinition);
+			pdfDoc.getBase64((data)=>{
+				res.writeHead(200, 
+				{
+					'Content-Type': 'application/pdf',
+					'Content-Disposition':'attachment;filename="filename.pdf"'
+				});
+		
+				const download = Buffer.from(data.toString('utf-8'), 'base64');
+				res.end(download);
+			});
+		});
+	res.redirect('/campagin/pdfshow');
 });
 
-router.get('/edit/:id/:target_fund/:raised_fund/:ctype/:description/:image/:publishDate/:endDate/:title', (req, res)=>{
+router.get('/edit/:id/:uid/:target_fund/:raised_fund/:ctype/:description/:image/:publishDate/:endDate/:title', (req, res)=>{
 	var currentCampaign = {
 		//uid : req.params.uid,
 		target_fund : req.params.target_fund,
@@ -119,7 +175,7 @@ router.get('/edit/:id/:target_fund/:raised_fund/:ctype/:description/:image/:publ
 	res.render('campaign/edit', currentCampaign);
 });
 
-router.post('/edit/:id/:target_fund/:raised_fund/:ctype/:description/:image/:publisedDate/:endDate/:title', (req, res)=>{
+router.post('/edit/:id/:uid/:target_fund/:raised_fund/:ctype/:description/:image/:publishDate/:endDate/:title', (req, res)=>{
 	
 	var Campaigns = {
 		id : req.params.id,
@@ -202,7 +258,7 @@ router.get('/contactadmin', (req, res)=>{
 router.post('/contactadmin', (req, res)=>{
 	
 	var currentCampaign = {
-		uid : req.cookies['uid'],
+		uid : req.cookies['id'],
 		description : req.body.Description
 	};
 	campaignmodel.contactadmin(currentCampaign, function(status){
@@ -215,6 +271,31 @@ router.post('/contactadmin', (req, res)=>{
 	});
 	
 });
+
+router.get('/donate', (req, res)=>{
+	res.render('campaign/donate');
+	
+});
+
+router.post('/donate', (req, res)=>{
+	
+	var donate = {
+		uid : req.cookies['id'],
+		cid : req.body.cid,
+		amount : req.body.amount
+	};
+	console.log(donate);
+	campaignmodel.donate(donate, function(status){
+		if(status){
+			//var mg = encodeURIComponent('**Donation-Done**');
+			res.redirect('/campaign/campaignlist');
+		}else{
+				
+		}
+	});
+	
+});
+
 
 router.get('/bookmark/:id/:uid', (req, res)=>{
 	
